@@ -1,0 +1,36 @@
+# Compiled ARM templates
+*.json
+!package.json
+
+# Environment-specific overrides (keep .bicepparam templates)
+# Uncomment below to exclude sensitive param files:
+# environments/*.bicepparam
+
+# Azure deployment state
+.azure/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Terraform (if migrated later)
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+
+# Secrets (never commit)
+*.pem
+*.key
+*.pfx
+*.p12
+secrets.json
+local.settings.json
