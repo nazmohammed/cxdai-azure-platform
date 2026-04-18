@@ -140,3 +140,35 @@ Key design goals:
 | Observability | Monitoring | `modules/monitoring/monitoring.bicep` | Log Analytics + App Insights |
 
 ---
+
+## 🔐 Security & Identity
+
+### Identity Model
+
+- **User-Assigned Managed Identity (UAMI)** is the single workload identity attached to Container Apps and AI Foundry.
+- No service principals, no shared keys, no connection strings checked into source.
+- All inter-service auth uses **Entra ID + RBAC**.
+
+### RBAC Assignments
+
+| Role | Scope | Assignee | Purpose |
+|------|-------|----------|---------|
+| `AcrPull` | ACR | UAMI | Pull container images |
+| `Storage Blob Data Contributor` | Storage | UAMI | Read/write blob data |
+| `Key Vault Secrets User` | Key Vault | UAMI | Read secrets at runtime |
+| `Search Index Data Contributor` | AI Search | UAMI | Read/write search indexes |
+| `Cognitive Services User` | AI Foundry | UAMI | Invoke AI models |
+| `Azure AI Developer` | AI Foundry Project | UAMI | Project-level operations |
+| `Monitoring Metrics Publisher` | App Insights | UAMI | Push custom telemetry |
+
+### Network Security Posture
+
+- **`publicNetworkAccess: Disabled`** on every PaaS resource (ACR, Key Vault, Storage, AI Search, AI Foundry, SWA backend).
+- **NSGs** on every spoke subnet — `Deny *` inbound by default with explicit allow rules.
+- **Bidirectional VNet peering** between Hub and Spoke — no transit through public internet.
+- **Private DNS zones** are linked to the Hub VNet; spoke resolves via peering.
+- **P2S VPN with Entra ID SSO** is the only path for developers to reach private endpoints.
+- **Storage** uses `allowSharedKeyAccess: false` and `minimumTlsVersion: TLS1_2`.
+- **Key Vault** uses RBAC authorization model (`enableRbacAuthorization: true`).
+
+---
