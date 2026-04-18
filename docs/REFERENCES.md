@@ -76,4 +76,41 @@ Key design goals:
                     │  Public frontend           │
                     │  Linked backend → ACA      │
                     └────────────────────────────┘
-```
+``` 
+
+---
+
+## 🌐 Network Topology
+
+### Hub VNet — `10.0.0.0/24`
+
+| Subnet | CIDR | Purpose |
+|--------|------|---------|
+| `GatewaySubnet` | `10.0.0.0/27` | P2S VPN Gateway (VpnGw1AZ) |
+| `AzureFirewallSubnet` | `10.0.0.64/26` | Reserved for Azure Firewall |
+| `AzureFirewallManagementSubnet` | `10.0.0.128/26` | Reserved for Firewall mgmt |
+| `dns-resolver-inbound` | `10.0.0.192/28` | Reserved for DNS Private Resolver |
+| `dns-resolver-outbound` | `10.0.0.208/28` | Reserved for DNS Private Resolver |
+
+### Spoke VNet — `10.1.0.0/21`
+
+| Subnet | CIDR | Purpose |
+|--------|------|---------|
+| `snet-aca` | `10.1.0.0/23` | Container Apps Environment (delegated) |
+| `snet-pep` | `10.1.2.0/24` | All Private Endpoints |
+| `snet-swa` | `10.1.3.0/24` | Static Web App private backend integration |
+
+### Private DNS Zones (Hub-linked, Spoke-resolved)
+
+- `privatelink.azurecr.io`
+- `privatelink.vaultcore.azure.net`
+- `privatelink.blob.core.windows.net`
+- `privatelink.file.core.windows.net`
+- `privatelink.search.windows.net`
+- `privatelink.api.azureml.ms`
+- `privatelink.notebooks.azure.net`
+- `privatelink.cognitiveservices.azure.com`
+- `privatelink.openai.azure.com`
+- `privatelink.azurestaticapps.net`
+
+---
