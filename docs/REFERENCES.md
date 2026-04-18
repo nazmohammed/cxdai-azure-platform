@@ -114,3 +114,29 @@ Key design goals:
 - `privatelink.azurestaticapps.net`
 
 ---
+
+## 🧩 Core Components
+
+| Layer | Component | Bicep Module | Notes |
+|-------|-----------|--------------|-------|
+| Network | Hub VNet | `modules/network/hub-vnet.bicep` | Gateway, Firewall (reserved), DNS Resolver (reserved) |
+| Network | Spoke VNet | `modules/network/spoke-vnet.bicep` | 3 workload subnets + NSGs |
+| Network | Peering | `modules/network/vnet-peering.bicep` | Bidirectional Hub ↔ Spoke |
+| Network | Private DNS | `modules/network/private-dns-zones.bicep` | 10 `privatelink.*` zones |
+| Network | VPN Gateway | `modules/network/vpn-gateway.bicep` | P2S + Entra ID auth |
+| Identity | UAMI | `modules/identity/managed-identity.bicep` | User-Assigned Managed Identity |
+| Identity | RBAC | `modules/identity/rbac-assignments.bicep` | 7 least-privilege role assignments |
+| Security | Key Vault | `modules/security/key-vault.bicep` | Standard SKU + PE |
+| Storage | Storage Account | `modules/storage/storage-account.bicep` | StorageV2 + blob/file PEs |
+| AI | AI Foundry Hub | `modules/ai/ai-foundry-hub.bicep` | Hub + PE |
+| AI | AI Foundry Project | `modules/ai/ai-foundry-project.bicep` | Workspace project |
+| AI | AI Search | `modules/ai/ai-search.bicep` | Basic/Standard + PE |
+| Compute | ACR | `modules/compute/container-registry.bicep` | Premium + PE |
+| Compute | Container Apps Env | `modules/compute/container-app-env.bicep` | VNet-integrated, internal |
+| Compute | Container App | `modules/compute/container-app.bicep` | Internal ingress |
+| Compute | Static Web App | `modules/compute/static-web-app.bicep` | Standard + linked backend |
+| Data | Fabric Capacity | `modules/fabric/fabric-capacity.bicep` | F4/F8 SKU |
+| Data | VNet Data Gateway | `modules/fabric/vnet-data-gateway.bicep` | Conditional |
+| Observability | Monitoring | `modules/monitoring/monitoring.bicep` | Log Analytics + App Insights |
+
+---
